@@ -5,6 +5,10 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 kubectl patch deployment metrics-server -n kube-system --type 'json' \
   -p '[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
 
+docker stop $(docker ps -q --filter "name=kind")
+
+docker start $(docker ps -aq --filter "name=kind")
+
 kind delete cluster
 
 helm install traefik traefik/traefik --set ports.web.nodePort=80 --set ports.websecure.nodePort=443 --set service.type=NodePort
