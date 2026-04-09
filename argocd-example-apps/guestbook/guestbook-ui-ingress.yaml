@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: guestbook-ui-ingress
+  annotations:
+    # Вказуємо Traefik, що це звичайний HTTP трафік
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  ingressClassName: traefik # Важливо: вказуємо, що обробляти має Traefik
+  rules:
+  - host: guestbook.localhost # Адреса, за якою ви будете відкривати сайт
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: guestbook-ui # Має точно збігатися з metadata.name вашого Service
+            port:
+              number: 80 # Порт, який відкритий у Service
