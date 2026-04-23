@@ -1,4 +1,4 @@
-resource "kubernetes_namespace" "monitoring" {
+resource "kubernetes_namespace_v1" "monitoring" {
   metadata {
     name = "monitoring"
   }
@@ -7,7 +7,7 @@ resource "kubernetes_namespace" "monitoring" {
 # Prometheus stack (включає Grafana!)
 resource "helm_release" "kube_prometheus" {
   name       = "kube-prometheus"
-  namespace  = kubernetes_namespace.monitoring.metadata[0].name
+  namespace  = kubernetes_namespace_v1.monitoring.metadata[0].name
 
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"
@@ -20,7 +20,7 @@ resource "helm_release" "kube_prometheus" {
 # Loki
 resource "helm_release" "loki" {
   name       = "loki"
-  namespace  = kubernetes_namespace.monitoring.metadata[0].name
+  namespace  = kubernetes_namespace_v1.monitoring.metadata[0].name
 
   repository = "https://grafana.github.io/helm-charts"
   chart      = "loki-stack"
